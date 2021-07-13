@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using CSGOMarketplace.Data.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,5 +13,11 @@ namespace CSGOMarketplace.Data
             : base(options)
         {
         }
+
+
+        public DbSet<Sale> Sales { get; init; }
+
+        public DbSet<Condition> Conditions { get; init; }
+
     }
 }

@@ -19,5 +19,14 @@ namespace CSGOMarketplace.Data
 
         public DbSet<Condition> Conditions { get; init; }
 
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Sale>()
+            .Property(b => b.Price)
+            .HasPrecision(15, 2);
+
+            base.OnModelCreating(builder);
+        }
     }
 }

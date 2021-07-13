@@ -8,7 +8,7 @@ namespace CSGOMarketplace.Data.Models
         public int Id { get; init; }
 
         [Required]
-        [MaxLength(MaxItemLength)]
+        [MaxLength(MaxItemNameLength)]
         public string Name { get; set; }
 
         [Required]

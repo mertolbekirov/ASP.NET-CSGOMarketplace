@@ -1,8 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
 using CSGOMarketplace.Data;
 using CSGOMarketplace.Data.Models;
+using Microsoft.AspNetCore.Identity;
+using CSGOMarketplace.Infrastructure;
 using CSGOMarketplace.Models.Items;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -11,14 +17,17 @@ namespace CSGOMarketplace.Controllers
     public class ItemsController : Controller
     {
         private readonly MarketplaceDbContext data;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public ItemsController(MarketplaceDbContext data)
-            => this.data = data;
+        public ItemsController(MarketplaceDbContext data, UserManager<ApplicationUser> userManager)
+        {
+            this.data = data;
+            this.userManager = userManager;
+        }
 
         public IActionResult All([FromQuery] AllItemsQueryModel query)
         {
             var itemsQuery = this.data.Items.AsQueryable();
-
 
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
@@ -54,13 +63,15 @@ namespace CSGOMarketplace.Controllers
             return View(query);
         }
 
+        [Authorize]
         public IActionResult Sell() => View(new AddItemForModel()
         {
             Conditions = this.GetSaleConditions()
         });
 
         [HttpPost]
-        public IActionResult Sell(AddItemForModel item)
+        [Authorize]
+        public async Task<IActionResult> Sell(AddItemForModel item)
         {
             if (!this.data.Conditions.Any(c => c.Id == item.ConditionId))
             {
@@ -80,9 +91,11 @@ namespace CSGOMarketplace.Controllers
                 Price = item.Price,
                 Float = item.Float,
                 ImageUrl = item.ImageUrl,
-                ConditionId = item.ConditionId
+                ConditionId = item.ConditionId,
+                ApplicationUserId = this.User.GetId()
             };
 
+            
             this.data.Items.Add(saleData);
             this.data.SaveChanges();
 
@@ -98,6 +111,21 @@ namespace CSGOMarketplace.Controllers
                     Name = c.Name
                 })
                 .ToList();
+
+        private async Task<string> GetProviderKey()
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+            var logins = await userManager.GetLoginsAsync(user);
+            foreach (var login in logins)
+            {
+                if (login.ProviderDisplayName == "Steam")
+                {
+                    return login.ProviderKey;
+                }
+            }
+
+            return null;
+        }
     }
 
     

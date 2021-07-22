@@ -1,7 +1,6 @@
-using System;
 using CSGOMarketplace.Data;
+using CSGOMarketplace.Data.Models;
 using CSGOMarketplace.Infrastructure;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -30,18 +29,21 @@ namespace CSGOMarketplace
             services.AddAuthentication().AddSteam();
 
             services
-                .AddDefaultIdentity<IdentityUser>(options =>
+                .AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
                     options.Password.RequireDigit = false;
                     options.Password.RequireLowercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
+                    options.User.RequireUniqueEmail = false;
                 })
-                .AddEntityFrameworkStores<MarketplaceDbContext>();
+                .AddEntityFrameworkStores<MarketplaceDbContext>()
+                .AddDefaultUI();
 
             services
                 .AddControllersWithViews();
-            
+
+            services.AddRazorPages();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

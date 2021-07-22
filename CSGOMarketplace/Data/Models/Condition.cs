@@ -8,6 +8,6 @@ namespace CSGOMarketplace.Data.Models
 
         public string Name { get; set; }
 
-        public IEnumerable<Item> Cars { get; init; } = new List<Item>();
+        public IEnumerable<Item> Items { get; init; } = new List<Item>();
     }
 }

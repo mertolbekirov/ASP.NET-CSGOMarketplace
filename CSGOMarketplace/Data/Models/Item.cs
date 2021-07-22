@@ -25,5 +25,9 @@ namespace CSGOMarketplace.Data.Models
         public decimal Price { get; set; }
 
         public bool IsSold { get; set; }
+
+        public string ApplicationUserId { get; set; }
+
+        public ApplicationUser Owner { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CSGOMarketplace.Data
 {
-    public class MarketplaceDbContext : IdentityDbContext
+    public class MarketplaceDbContext : IdentityDbContext<ApplicationUser>
     {
         public MarketplaceDbContext(DbContextOptions<MarketplaceDbContext> options)
             : base(options)
@@ -26,6 +26,19 @@ namespace CSGOMarketplace.Data
             .Property(b => b.Price)
             .HasPrecision(15, 2);
 
+            builder
+                .Entity<Item>()
+                .HasOne(c => c.Condition)
+                .WithMany(c => c.Items)
+                .HasForeignKey(c => c.ConditionId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Item>()
+                .HasOne(i => i.Owner)
+                .WithMany(u => u.Items)
+                .OnDelete(DeleteBehavior.Restrict);
+            
             base.OnModelCreating(builder);
         }
     }

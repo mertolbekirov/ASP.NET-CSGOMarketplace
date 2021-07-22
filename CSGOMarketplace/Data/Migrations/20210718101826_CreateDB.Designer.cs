@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CSGOMarketplace.Data.Migrations
 {
     [DbContext(typeof(MarketplaceDbContext))]
-    [Migration("20210713150953_SalesAndConditions")]
-    partial class SalesAndConditions
+    [Migration("20210718101826_CreateDB")]
+    partial class CreateDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,7 +36,7 @@ namespace CSGOMarketplace.Data.Migrations
                     b.ToTable("Conditions");
                 });
 
-            modelBuilder.Entity("CSGOMarketplace.Data.Models.Sale", b =>
+            modelBuilder.Entity("CSGOMarketplace.Data.Models.Item", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -69,7 +69,7 @@ namespace CSGOMarketplace.Data.Migrations
 
                     b.HasIndex("ConditionId");
 
-                    b.ToTable("Sales");
+                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -272,7 +272,7 @@ namespace CSGOMarketplace.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("CSGOMarketplace.Data.Models.Sale", b =>
+            modelBuilder.Entity("CSGOMarketplace.Data.Models.Item", b =>
                 {
                     b.HasOne("CSGOMarketplace.Data.Models.Condition", "Condition")
                         .WithMany("Cars")

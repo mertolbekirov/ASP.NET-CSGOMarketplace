@@ -15,14 +15,14 @@ namespace CSGOMarketplace.Data
         }
 
 
-        public DbSet<Sale> Sales { get; init; }
+        public DbSet<Item> Items { get; init; }
 
         public DbSet<Condition> Conditions { get; init; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Sale>()
+            builder.Entity<Item>()
             .Property(b => b.Price)
             .HasPrecision(15, 2);
 

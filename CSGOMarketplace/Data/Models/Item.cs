@@ -3,7 +3,7 @@ using static CSGOMarketplace.Data.DataConstants;
 
 namespace CSGOMarketplace.Data.Models
 {
-    public class Sale
+    public class Item
     {
         public int Id { get; init; }
 
@@ -13,6 +13,8 @@ namespace CSGOMarketplace.Data.Models
 
         [Required]
         public double Float { get; set; }
+
+        public int ConditionId { get; set; }
 
         [Required]
         public Condition Condition { get; set; }

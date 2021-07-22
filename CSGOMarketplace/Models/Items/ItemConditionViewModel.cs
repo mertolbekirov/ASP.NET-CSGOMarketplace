@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CSGOMarketplace.Models.Sales
+namespace CSGOMarketplace.Models.Items
 {
-    public class SaleConditionViewModel
+    public class ItemConditionViewModel
     {
         public int Id { get; init; }
 

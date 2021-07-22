@@ -2,11 +2,11 @@
 using System.ComponentModel.DataAnnotations;
 using static CSGOMarketplace.Data.DataConstants;
 
-namespace CSGOMarketplace.Models.Sales
+namespace CSGOMarketplace.Models.Items
 {
-    public class AddSaleViewModel
+    public class AddItemForModel
     {
-            [Required]
+        [Required]
         [StringLength(MaxItemNameLength, MinimumLength = MinItemNameLength)]
         public string Name { get; init; }
 
@@ -24,6 +24,6 @@ namespace CSGOMarketplace.Models.Sales
         [Display(Name = "Condition")]
         public int ConditionId { get; init; }
 
-        public IEnumerable<SaleConditionViewModel> Conditions { get; set; }
+        public IEnumerable<ItemConditionViewModel> Conditions { get; set; }
     }
 }

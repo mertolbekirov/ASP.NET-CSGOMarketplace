@@ -1,5 +1,7 @@
+using System;
 using CSGOMarketplace.Data;
 using CSGOMarketplace.Infrastructure;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -25,6 +27,8 @@ namespace CSGOMarketplace
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
+            services.AddAuthentication().AddSteam();
+
             services
                 .AddDefaultIdentity<IdentityUser>(options =>
                 {
@@ -37,6 +41,7 @@ namespace CSGOMarketplace
 
             services
                 .AddControllersWithViews();
+            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

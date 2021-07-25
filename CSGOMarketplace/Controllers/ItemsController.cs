@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using CSGOMarketplace.Data;
 using CSGOMarketplace.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using CSGOMarketplace.Infrastructure;
+using CSGOMarketplace.Models;
 using CSGOMarketplace.Models.Items;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Newtonsoft.Json;
 
 
 namespace CSGOMarketplace.Controllers
@@ -64,14 +66,28 @@ namespace CSGOMarketplace.Controllers
         }
 
         [Authorize]
-        public IActionResult Sell() => View(new AddItemForModel()
+        public IActionResult Sell() => View();
+
+        public async Task<IActionResult> ChooseItem()
         {
-            Conditions = this.GetSaleConditions()
-        });
+            var providerKey = await this.GetProviderKey();
+            providerKey = providerKey.Split('/').LastOrDefault();
+            if (providerKey == null)
+            {
+                return View("/Error");
+            }
+
+            var model = new ChooseItemViewModel()
+            {
+                ProviderKey = providerKey
+            };
+
+            return View(model);
+        }
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Sell(AddItemForModel item)
+        public IActionResult Sell(AddItemForModel item)
         {
             if (!this.data.Conditions.Any(c => c.Id == item.ConditionId))
             {

@@ -1,0 +1,15 @@
+﻿@model ChooseItemViewModel
+
+@{
+    ViewData["Title"] = "Choose an item to sell";
+}
+
+<p class="d-none" id="providerKey">@Model.ProviderKey</p>
+
+<div class="row" id="itemsRow">
+    
+</div>
+
+@section scripts {
+    <script src="~/js/chooseItem.js"></script>
+}

@@ -4,10 +4,9 @@ using static CSGOMarketplace.Data.DataConstants;
 
 namespace CSGOMarketplace.Models.Items
 {
-    public class AddItemForModel
+    public class AddItemFormModel
     {
         [Required]
-        [StringLength(MaxItemNameLength, MinimumLength = MinItemNameLength)]
         public string Name { get; init; }
 
         [Range(0,1)]
@@ -21,9 +20,10 @@ namespace CSGOMarketplace.Models.Items
         [Url]
         public string ImageUrl { get; init; }
 
-        [Display(Name = "Condition")]
-        public int ConditionId { get; init; }
+        [Required]
+        [Url]
+        public string InspectUrl { get; set; }
 
-        public IEnumerable<ItemConditionViewModel> Conditions { get; set; }
+        public string Condition { get; set; }
     }
 }

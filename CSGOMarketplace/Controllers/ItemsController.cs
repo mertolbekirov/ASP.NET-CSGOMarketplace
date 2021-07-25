@@ -1,21 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using CSGOMarketplace.Data;
 using CSGOMarketplace.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using CSGOMarketplace.Infrastructure;
-using CSGOMarketplace.Models;
 using CSGOMarketplace.Models.Items;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
-
 
 namespace CSGOMarketplace.Controllers
 {
+    using static DataConstants;
     public class ItemsController : Controller
     {
         private readonly MarketplaceDbContext data;
@@ -64,10 +61,6 @@ namespace CSGOMarketplace.Controllers
 
             return View(query);
         }
-
-        [Authorize]
-        public IActionResult Sell() => View();
-
         public async Task<IActionResult> ChooseItem()
         {
             var providerKey = await this.GetProviderKey();
@@ -85,19 +78,40 @@ namespace CSGOMarketplace.Controllers
             return View(model);
         }
 
+        [Authorize]
+        public async Task<IActionResult> Sell([FromQuery]SellItemQueryModel query)
+        {
+            var csgoFloatRequest = DataConstants.CSGOFloatApiEndpoint + $"?s={query.S}&a={query.A}&d={query.D}";
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync(csgoFloatRequest);
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var itemInfo = JsonConvert.DeserializeObject<ItemInfoJsonResponseModel>(json);
+                var item = itemInfo.ItemInfo;
+                var inspectUrl = DataConstants.SteamItemInspectUrl + $"S{query.S}A{query.A}D{query.D}";
+                return View(new AddItemFormModel()
+                {
+                    Name = item.ItemName,
+                    Price = DataConstants.SamplePrice,
+                    Float = double.Parse(item.FloatValue),
+                    ImageUrl = item.ImageUrl,
+                    InspectUrl = inspectUrl,
+                    Condition = item.WearName
+                });
+            }
+            else
+            {
+                return View("/Error");
+            }
+        }
+
         [HttpPost]
         [Authorize]
-        public IActionResult Sell(AddItemForModel item)
+        public IActionResult Sell(AddItemFormModel item)
         {
-            if (!this.data.Conditions.Any(c => c.Id == item.ConditionId))
-            {
-                this.ModelState.AddModelError(nameof(item.ConditionId), "Condition does not exist.");
-            }
-
             if (!ModelState.IsValid)
             {
-                item.Conditions = this.GetSaleConditions();
-
                 return View(item);
             }
 
@@ -107,7 +121,6 @@ namespace CSGOMarketplace.Controllers
                 Price = item.Price,
                 Float = item.Float,
                 ImageUrl = item.ImageUrl,
-                ConditionId = item.ConditionId,
                 ApplicationUserId = this.User.GetId()
             };
 
@@ -118,15 +131,6 @@ namespace CSGOMarketplace.Controllers
             return RedirectToAction(nameof(All));
         }
 
-        private IEnumerable<ItemConditionViewModel> GetSaleConditions()
-            => this.data
-                .Conditions
-                .Select(c => new ItemConditionViewModel
-                {
-                    Id = c.Id,
-                    Name = c.Name
-                })
-                .ToList();
 
         private async Task<string> GetProviderKey()
         {

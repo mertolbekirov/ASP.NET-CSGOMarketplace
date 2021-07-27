@@ -4,16 +4,15 @@ using static CSGOMarketplace.Data.DataConstants;
 
 namespace CSGOMarketplace.Models.Items
 {
-    public class AddItemFormModel
+    public class ItemFormModel
     {
         [Required]
         public string Name { get; init; }
 
-        [Range(0,1)]
         public double Float { get; init; }
 
         [Range(typeof(decimal), "0", "79228162514264337593543950335")]
-        public decimal Price { get; set; }
+        public decimal Price { get; init; }
 
         [Display(Name = "Image URL")]
         [Required]
@@ -21,9 +20,8 @@ namespace CSGOMarketplace.Models.Items
         public string ImageUrl { get; init; }
 
         [Required]
-        [Url]
-        public string InspectUrl { get; set; }
+        public string InspectUrl { get; init; }
 
-        public string Condition { get; set; }
+        public string Condition { get; init; }
     }
 }

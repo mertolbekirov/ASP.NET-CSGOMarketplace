@@ -1,136 +1,100 @@
-﻿using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using CSGOMarketplace.Data;
+﻿using CSGOMarketplace.Data;
 using CSGOMarketplace.Data.Models;
-using Microsoft.AspNetCore.Identity;
 using CSGOMarketplace.Infrastructure;
 using CSGOMarketplace.Models.Items;
+using CSGOMarketplace.Services.Items;
+using CSGOMarketplace.Services.Items.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace CSGOMarketplace.Controllers
 {
-    using static DataConstants;
     public class ItemsController : Controller
     {
         private readonly MarketplaceDbContext data;
-        private readonly UserManager<ApplicationUser> userManager;
-
-        public ItemsController(MarketplaceDbContext data, UserManager<ApplicationUser> userManager)
+        private readonly UserManager<User> userManager;
+        private readonly IItemService items;
+        public ItemsController(MarketplaceDbContext data, IItemService items)
         {
             this.data = data;
-            this.userManager = userManager;
+            this.items = items;
         }
 
         public IActionResult All([FromQuery] AllItemsQueryModel query)
         {
-            var itemsQuery = this.data.Items.AsQueryable();
+            var queryResult = this.items.All(
+                query.SearchTerm,
+                query.Sorting,
+                query.CurrentPage,
+                AllItemsQueryModel.ItemsPerPage);
 
-            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
-            {
-                itemsQuery = itemsQuery.Where(item =>
-                    (item.Name).ToLower().Contains(query.SearchTerm.ToLower()));
-            }
-
-            itemsQuery = query.Sorting switch
-            {
-                ItemSorting.Float => itemsQuery.OrderByDescending(item => item.Float),
-                ItemSorting.Price or _ => itemsQuery.OrderByDescending(item => item.Price)
-            };
-
-            var totalItems = itemsQuery.Count();
-
-            var items = itemsQuery
-                .Skip((query.CurrentPage - 1) * AllItemsQueryModel.ItemsPerPage)
-                .Take(AllItemsQueryModel.ItemsPerPage)
-                .Select(item => new ItemListingViewModel()
-                {
-                    Id = item.Id,
-                    ImageUrl = item.ImageUrl,
-                    Price = item.Price,
-                    Name = item.Name,
-                    Float = item.Float,
-                    Condition = item.Condition.Name,
-                })
-                .ToList();
-
-            query.TotalItems = totalItems;
-            query.Items = items;
+            query.TotalItems = queryResult.TotalItems;
+            query.Items = queryResult.Items;
 
             return View(query);
         }
         public async Task<IActionResult> ChooseItem()
         {
             var providerKey = await this.GetProviderKey();
-            providerKey = providerKey.Split('/').LastOrDefault();
             if (providerKey == null)
             {
-                return View("/Error");
+                return BadRequest();
             }
 
-            var model = new ChooseItemViewModel()
+            return View(new ChooseItemViewModel()
             {
                 ProviderKey = providerKey
-            };
-
-            return View(model);
+            });
         }
 
         [Authorize]
         public async Task<IActionResult> Sell([FromQuery]SellItemQueryModel query)
         {
-            var csgoFloatRequest = DataConstants.CSGOFloatApiEndpoint + $"?s={query.S}&a={query.A}&d={query.D}";
-            HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync(csgoFloatRequest);
-            if (response.IsSuccessStatusCode)
+            var item = await GetItemInfoAsync(await CSGOFloatRequestAsync(query.S, query.A, query.D));
+            var inspectUrl = DataConstants.SteamItemInspectUrl + $"S{query.S}A{query.A}D{query.D}";
+            return View(new ItemFormModel()
             {
-                var json = await response.Content.ReadAsStringAsync();
-                var itemInfo = JsonConvert.DeserializeObject<ItemInfoJsonResponseModel>(json);
-                var item = itemInfo.ItemInfo;
-                var inspectUrl = DataConstants.SteamItemInspectUrl + $"S{query.S}A{query.A}D{query.D}";
-                return View(new AddItemFormModel()
-                {
-                    Name = item.ItemName,
-                    Price = DataConstants.SamplePrice,
-                    Float = double.Parse(item.FloatValue),
-                    ImageUrl = item.ImageUrl,
-                    InspectUrl = inspectUrl,
-                    Condition = item.WearName
-                });
-            }
-            else
-            {
-                return View("/Error");
-            }
+                Name = item.Name,
+                Price = DataConstants.SamplePrice,
+                Float = item.FloatValue,
+                ImageUrl = query.IconUrl,
+                InspectUrl = inspectUrl,
+                Condition = item.Condition
+            });
         }
 
         [HttpPost]
         [Authorize]
-        public IActionResult Sell(AddItemFormModel item)
+        public async Task<IActionResult> Sell(ItemFormModel item)
         {
             if (!ModelState.IsValid)
             {
                 return View(item);
             }
+            var csgoFloatResponse = await CSGOFloatRequestAsync(item.InspectUrl);
+            var csgoFloatItem = await GetItemInfoAsync(csgoFloatResponse);
 
-            var saleData = new Item()
+            if (csgoFloatItem == null)
             {
-                Name = item.Name,
-                Price = item.Price,
-                Float = item.Float,
-                ImageUrl = item.ImageUrl,
-                ApplicationUserId = this.User.GetId()
-            };
+                return BadRequest();
+            }
 
-            
-            this.data.Items.Add(saleData);
-            this.data.SaveChanges();
+            this.items.Sell(
+                csgoFloatItem.Name,
+                item.Price,
+                csgoFloatItem.FloatValue,
+                csgoFloatItem.ImageUrl,
+                item.InspectUrl,
+                this.User.GetId(),
+                csgoFloatItem.Condition);
 
             return RedirectToAction(nameof(All));
         }
-
 
         private async Task<string> GetProviderKey()
         {
@@ -140,13 +104,44 @@ namespace CSGOMarketplace.Controllers
             {
                 if (login.ProviderDisplayName == "Steam")
                 {
-                    return login.ProviderKey;
+                    return login.ProviderKey.Split('/').LastOrDefault(); ;
                 }
             }
-
             return null;
         }
-    }
 
-    
+        private async Task<HttpResponseMessage> CSGOFloatRequestAsync(string steamId, string assetId, string d)
+        {
+            var csgoFloatRequest = DataConstants.CSGOFloatApiEndpoint + $"?s={steamId}&a={assetId}&d={d}";
+            HttpClient client = new HttpClient();
+            return await client.GetAsync(csgoFloatRequest);
+        }
+
+        private async Task<HttpResponseMessage> CSGOFloatRequestAsync(string inspectLink)
+        {
+            var csgoFloatRequest = DataConstants.CSGOFloatApiEndpoint + inspectLink;
+            HttpClient client = new HttpClient();
+            return await client.GetAsync(csgoFloatRequest);
+        }
+        private async Task<ItemJsonResponseModel> GetItemInfoAsync(HttpResponseMessage response)
+        {
+            string json = null;
+            if (response.IsSuccessStatusCode)
+            {
+                json = await response.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                return null;
+            }
+            var itemInfo = JsonConvert.DeserializeObject<ItemInfoJsonResponseModel>(json);
+            var item = itemInfo.ItemInfo;
+            if (item.Condition == null)
+            {
+                item.Name = item.FullName;
+            }
+
+            return item;
+        }
+    }
 }

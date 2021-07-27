@@ -1,4 +1,5 @@
-﻿@model AllItemsQueryModel
+﻿@using CSGOMarketplace.Services.Items.Models
+@model AllItemsQueryModel
 
 @{
     ViewData["Title"] = "All Cars";
@@ -59,9 +60,13 @@
                 <img class="card-img-top" src="@item.ImageUrl" alt="@item.Name - @item.Condition">
                 <div class="card-body text-center">
                     <h5 class="card-title text-center">@item.Name (@item.Condition)</h5>
-                    <p class="card-text">@item.Float</p>
+                    @if (item.Float != 0)
+                    {
+                    <p class="card-text">@item.Float:f2</p>
+                    }
                     <p class="card-text">$@item.Price</p>
-                    <a asp-controller="Items" asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
+                    <a href="@item.InspectUrl" class="btn btn-warning">Inspect</a>
+                    <a asp-controller="Items" asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Buy</a>
                 </div>
             </div>
         </div>

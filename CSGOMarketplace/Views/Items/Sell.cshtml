@@ -1,4 +1,4 @@
-﻿@model AddItemFormModel
+﻿@model ItemFormModel
 
 @{
     ViewData["Title"] = "Sell an item";
@@ -16,16 +16,20 @@
                 <input asp-for="Name" class="form-control" readonly>
                 <span asp-validation-for="Name" class="small text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Condition"></label>
-                <input asp-for="Condition" class="form-control" readonly>
-                <span asp-validation-for="Price" class="small text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Float"></label>
-                <input asp-for="Float" class="form-control" readonly>
-                <span asp-validation-for="Float" class="small text-danger"></span>
-            </div>
+            @if (@Model.Condition != null)
+            {
+                <div class="form-group">
+                    <label asp-for="Condition"></label>
+                    <input asp-for="Condition" class="form-control" readonly>
+                    <span asp-validation-for="Condition" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Float"></label>
+                    <input asp-for="Float" class="form-control" readonly>
+                    <span asp-validation-for="Float" class="small text-danger"></span>
+                </div>
+            }
+            
             <div class="form-group">
                 <label asp-for="Price">Price in USD ($)</label>
                 <input asp-for="Price" class="form-control" placeholder="199.99">
@@ -33,6 +37,7 @@
             </div>
 
             <input class="d-none" asp-for="InspectUrl" />
+            <input class="d-none" asp-for="ImageUrl" />
 
             <input class="btn btn-primary" type="submit" value="Sell" />
         </form>

@@ -15,5 +15,7 @@ namespace CSGOMarketplace.Models.Items
 
         //Called A from steam - It's for asset ID
         public string A { get; init; }
+
+        public string IconUrl { get; init; }
     }
 }

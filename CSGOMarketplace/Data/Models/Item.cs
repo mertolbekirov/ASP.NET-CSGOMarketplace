@@ -11,23 +11,24 @@ namespace CSGOMarketplace.Data.Models
         [MaxLength(MaxItemNameLength)]
         public string Name { get; set; }
 
-        [Required]
-        public double Float { get; set; }
+        public double? Float { get; set; }
 
-        public int ConditionId { get; set; }
+        public int? ConditionId { get; set; }
 
-        [Required]
         public Condition Condition { get; set; }
 
         [Required]
         public string ImageUrl { get; set; }
 
+        [Required]
+        public string InspectUrl { get; set; }
+
         public decimal Price { get; set; }
 
         public bool IsSold { get; set; }
 
-        public string ApplicationUserId { get; set; }
+        public string UserId { get; set; }
 
-        public ApplicationUser Owner { get; set; }
+        public User Owner { get; set; }
     }
 }

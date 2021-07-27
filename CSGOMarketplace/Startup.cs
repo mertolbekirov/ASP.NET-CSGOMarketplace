@@ -29,7 +29,7 @@ namespace CSGOMarketplace
             services.AddAuthentication().AddSteam();
 
             services
-                .AddIdentity<ApplicationUser, IdentityRole>(options =>
+                .AddIdentity<User, IdentityRole>(options =>
                 {
                     options.Password.RequireDigit = false;
                     options.Password.RequireLowercase = false;

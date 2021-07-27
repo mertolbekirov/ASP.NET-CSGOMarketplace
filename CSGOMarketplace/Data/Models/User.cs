@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CSGOMarketplace.Data.Models
 {
-    public class ApplicationUser : IdentityUser
+    public class User : IdentityUser
     {
         public ICollection<Item> Items { get; init; } = new List<Item>();
 

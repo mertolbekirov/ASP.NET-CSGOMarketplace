@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CSGOMarketplace.Data
 {
-    public class MarketplaceDbContext : IdentityDbContext<ApplicationUser>
+    public class MarketplaceDbContext : IdentityDbContext<User>
     {
         public MarketplaceDbContext(DbContextOptions<MarketplaceDbContext> options)
             : base(options)

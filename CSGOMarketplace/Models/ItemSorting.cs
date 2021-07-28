@@ -1,4 +1,4 @@
-﻿namespace CSGOMarketplace.Services.Items.Models
+﻿namespace CSGOMarketplace.Models
 {
     public enum ItemSorting
     {

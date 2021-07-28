@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using CSGOMarketplace.Data;
 using CSGOMarketplace.Data.Models;
+using CSGOMarketplace.Models;
 using CSGOMarketplace.Services.Items.Models;
 
 namespace CSGOMarketplace.Services.Items

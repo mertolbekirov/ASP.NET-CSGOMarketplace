@@ -1,4 +1,5 @@
-﻿using CSGOMarketplace.Services.Items.Models;
+﻿using CSGOMarketplace.Models;
+using CSGOMarketplace.Services.Items.Models;
 
 namespace CSGOMarketplace.Services.Items
 {

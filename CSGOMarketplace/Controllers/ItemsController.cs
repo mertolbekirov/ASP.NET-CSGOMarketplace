@@ -16,13 +16,12 @@ namespace CSGOMarketplace.Controllers
 {
     public class ItemsController : Controller
     {
-        private readonly MarketplaceDbContext data;
         private readonly UserManager<User> userManager;
         private readonly IItemService items;
-        public ItemsController(MarketplaceDbContext data, IItemService items)
+        public ItemsController(MarketplaceDbContext data, IItemService items, UserManager<User> userManager)
         {
-            this.data = data;
             this.items = items;
+            this.userManager = userManager;
         }
 
         public IActionResult All([FromQuery] AllItemsQueryModel query)
@@ -62,7 +61,7 @@ namespace CSGOMarketplace.Controllers
                 Name = item.Name,
                 Price = DataConstants.SamplePrice,
                 Float = item.FloatValue,
-                ImageUrl = query.IconUrl,
+                ImageUrl = DataConstants.SteamImageEndpoint + query.IconUrl,
                 InspectUrl = inspectUrl,
                 Condition = item.Condition
             });
@@ -72,6 +71,7 @@ namespace CSGOMarketplace.Controllers
         [Authorize]
         public async Task<IActionResult> Sell(ItemFormModel item)
         {
+            //TODO: Defend from non-marketable items
             if (!ModelState.IsValid)
             {
                 return View(item);
@@ -88,7 +88,7 @@ namespace CSGOMarketplace.Controllers
                 csgoFloatItem.Name,
                 item.Price,
                 csgoFloatItem.FloatValue,
-                csgoFloatItem.ImageUrl,
+                item.ImageUrl,
                 item.InspectUrl,
                 this.User.GetId(),
                 csgoFloatItem.Condition);
@@ -119,7 +119,7 @@ namespace CSGOMarketplace.Controllers
 
         private async Task<HttpResponseMessage> CSGOFloatRequestAsync(string inspectLink)
         {
-            var csgoFloatRequest = DataConstants.CSGOFloatApiEndpoint + inspectLink;
+            var csgoFloatRequest = DataConstants.CSGOFloatApiEndpoint + $"?url={inspectLink}";
             HttpClient client = new HttpClient();
             return await client.GetAsync(csgoFloatRequest);
         }

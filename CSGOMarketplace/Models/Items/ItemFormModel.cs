@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using CSGOMarketplace.Data;
 using System.ComponentModel.DataAnnotations;
-using static CSGOMarketplace.Data.DataConstants;
 
 namespace CSGOMarketplace.Models.Items
 {
@@ -11,7 +10,7 @@ namespace CSGOMarketplace.Models.Items
 
         public double Float { get; init; }
 
-        [Range(typeof(decimal), "0", "79228162514264337593543950335")]
+        [Range(double.Epsilon, DataConstants.MaxItemPrice, ErrorMessage = "Please enter a value between 0 and 100000")]
         public decimal Price { get; init; }
 
         [Display(Name = "Image URL")]

@@ -1,6 +1,8 @@
 using CSGOMarketplace.Data;
 using CSGOMarketplace.Data.Models;
 using CSGOMarketplace.Infrastructure;
+using CSGOMarketplace.Services.Items;
+using CSGOMarketplace.Services.Statistics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -27,6 +29,8 @@ namespace CSGOMarketplace
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddAuthentication().AddSteam();
+            services.AddTransient<IItemService, ItemService>();
+            services.AddTransient<IStatisticsService, StatisticsService>();
 
             services
                 .AddIdentity<User, IdentityRole>(options =>

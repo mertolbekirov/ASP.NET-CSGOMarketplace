@@ -17,19 +17,28 @@ namespace CSGOMarketplace.Infrastructure
         public static IApplicationBuilder PrepareDatabase(
             this IApplicationBuilder app)
         {
-            using var scopedServices = app.ApplicationServices.CreateScope();
+            using var serviceScope = app.ApplicationServices.CreateScope();
+            var services = serviceScope.ServiceProvider;
 
-            var data = scopedServices.ServiceProvider.GetService<MarketplaceDbContext>();
+            MigrateDatabase(services);
 
-            data.Database.Migrate();
-
-            SeedConditions(data);
+            SeedConditions(services);
+            SeedAdministrator(services);
 
             return app;
         }
 
-        private static void SeedConditions(MarketplaceDbContext data)
+        private static void MigrateDatabase(IServiceProvider services)
         {
+            var data = services.GetRequiredService<MarketplaceDbContext>();
+
+            data.Database.Migrate();
+        }
+
+        private static void SeedConditions(IServiceProvider services)
+        {
+            var data = services.GetRequiredService<MarketplaceDbContext>();
+
             if (data.Conditions.Any())
             {
                 return;

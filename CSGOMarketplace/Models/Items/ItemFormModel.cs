@@ -16,11 +16,11 @@ namespace CSGOMarketplace.Models.Items
         [Display(Name = "Image URL")]
         [Required]
         [Url]
-        public string ImageUrl { get; init; }
+        public string ImageUrl { get; set; }
 
         [Required]
         public string InspectUrl { get; init; }
 
-        public string Condition { get; init; }
+        public string ConditionName { get; init; }
     }
 }

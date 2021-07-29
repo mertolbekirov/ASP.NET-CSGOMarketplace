@@ -1,15 +1,13 @@
-﻿using CSGOMarketplace.Data;
+﻿using AutoMapper;
+using CSGOMarketplace.Data;
 using CSGOMarketplace.Data.Models;
 using CSGOMarketplace.Infrastructure;
 using CSGOMarketplace.Models.Items;
 using CSGOMarketplace.Services.Items;
-using CSGOMarketplace.Services.Items.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace CSGOMarketplace.Controllers
@@ -18,10 +16,13 @@ namespace CSGOMarketplace.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly IItemService items;
-        public ItemsController(MarketplaceDbContext data, IItemService items, UserManager<User> userManager)
+        private readonly IMapper mapper;
+
+        public ItemsController(IItemService items, UserManager<User> userManager, IMapper mapper)
         {
             this.items = items;
             this.userManager = userManager;
+            this.mapper = mapper;
         }
 
         public IActionResult All([FromQuery] AllItemsQueryModel query)
@@ -37,6 +38,8 @@ namespace CSGOMarketplace.Controllers
 
             return View(query);
         }
+
+        [Authorize]
         public async Task<IActionResult> ChooseItem()
         {
             var providerKey = await this.GetProviderKey();
@@ -52,19 +55,65 @@ namespace CSGOMarketplace.Controllers
         }
 
         [Authorize]
+        public IActionResult Mine()
+        {
+            var myItems = this.items.ByUser(this.User.Id());
+
+            return View(myItems);
+        }
+
+        [Authorize]
+        public IActionResult Edit(int id)
+        {
+            var userId = this.User.Id();
+
+            var item = this.items.ItemById(id);
+
+            if (item == null)
+            {
+                return BadRequest();
+            }
+
+            if (item.OwnerId != userId && !User.IsAdmin())
+            {
+                return Unauthorized();
+            }
+
+            var itemForm = this.mapper.Map<ItemFormModel>(item);
+
+            return View(itemForm);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Edit(int id, ItemFormModel car)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(car);
+            }
+
+            if (!this.items.IsByUser(id, this.User.Id()) && !User.IsAdmin())
+            {
+                return BadRequest();
+            }
+
+            this.items.Edit(id, car.Price);
+
+            return RedirectToAction(nameof(All));
+        }
+
+        [Authorize]
         public async Task<IActionResult> Sell([FromQuery]SellItemQueryModel query)
         {
-            var item = await GetItemInfoAsync(await CSGOFloatRequestAsync(query.S, query.A, query.D));
-            var inspectUrl = DataConstants.SteamItemInspectUrl + $"S{query.S}A{query.A}D{query.D}";
-            return View(new ItemFormModel()
+            var csgofloatItem = await this.items.CSGOFloatItemInfo(query.S, query.A, query.D);
+            if (csgofloatItem == null)
             {
-                Name = item.Name,
-                Price = DataConstants.SamplePrice,
-                Float = item.FloatValue,
-                ImageUrl = DataConstants.SteamImageEndpoint + query.IconUrl,
-                InspectUrl = inspectUrl,
-                Condition = item.Condition
-            });
+                return BadRequest();
+            }
+            var item = this.mapper.Map<ItemFormModel>(csgofloatItem);
+            item.ImageUrl = query.IconUrl;
+            return View(item);
         }
 
         [HttpPost]
@@ -76,8 +125,8 @@ namespace CSGOMarketplace.Controllers
             {
                 return View(item);
             }
-            var csgoFloatResponse = await CSGOFloatRequestAsync(item.InspectUrl);
-            var csgoFloatItem = await GetItemInfoAsync(csgoFloatResponse);
+            var queryParams = item.InspectUrl.Split(new char[] {'S', 'A', 'D'});
+            var csgoFloatItem = await this.items.CSGOFloatItemInfo(queryParams[1], queryParams[2], queryParams[3]);
 
             if (csgoFloatItem == null)
             {
@@ -87,11 +136,33 @@ namespace CSGOMarketplace.Controllers
             this.items.Sell(
                 csgoFloatItem.Name,
                 item.Price,
-                csgoFloatItem.FloatValue,
+                csgoFloatItem.Float,
                 item.ImageUrl,
                 item.InspectUrl,
-                this.User.GetId(),
-                csgoFloatItem.Condition);
+                this.User.Id(),
+                csgoFloatItem.ConditionName);
+
+            return RedirectToAction(nameof(All));
+        }
+
+        [Authorize]
+        public IActionResult Delete(int id)
+        {
+            var userId = this.User.Id();
+
+            var item = this.items.ItemById(id);
+
+            if (item == null)
+            {
+                return BadRequest();
+            }
+
+            if (item.OwnerId != userId && !User.IsAdmin())
+            {
+                return Unauthorized();
+            }
+
+            this.items.Delete(id);
 
             return RedirectToAction(nameof(All));
         }
@@ -110,38 +181,6 @@ namespace CSGOMarketplace.Controllers
             return null;
         }
 
-        private async Task<HttpResponseMessage> CSGOFloatRequestAsync(string steamId, string assetId, string d)
-        {
-            var csgoFloatRequest = DataConstants.CSGOFloatApiEndpoint + $"?s={steamId}&a={assetId}&d={d}";
-            HttpClient client = new HttpClient();
-            return await client.GetAsync(csgoFloatRequest);
-        }
-
-        private async Task<HttpResponseMessage> CSGOFloatRequestAsync(string inspectLink)
-        {
-            var csgoFloatRequest = DataConstants.CSGOFloatApiEndpoint + $"?url={inspectLink}";
-            HttpClient client = new HttpClient();
-            return await client.GetAsync(csgoFloatRequest);
-        }
-        private async Task<ItemJsonResponseModel> GetItemInfoAsync(HttpResponseMessage response)
-        {
-            string json = null;
-            if (response.IsSuccessStatusCode)
-            {
-                json = await response.Content.ReadAsStringAsync();
-            }
-            else
-            {
-                return null;
-            }
-            var itemInfo = JsonConvert.DeserializeObject<ItemInfoJsonResponseModel>(json);
-            var item = itemInfo.ItemInfo;
-            if (item.Condition == null)
-            {
-                item.Name = item.FullName;
-            }
-
-            return item;
-        }
+       
     }
 }

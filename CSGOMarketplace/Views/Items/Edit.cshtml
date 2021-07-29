@@ -1,10 +1,10 @@
 ﻿@model ItemFormModel
 
 @{
-    ViewBag.Title = "Sell item";
+    ViewBag.Title = "Edit Item";
 }
 
-<partial name="_ItemFormPartial"/>
+<partial name="_ItemFormPartial" model="@Model" />
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

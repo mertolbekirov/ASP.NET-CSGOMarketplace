@@ -28,12 +28,10 @@ namespace CSGOMarketplace
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddAuthentication().AddSteam();
-            services.AddTransient<IItemService, ItemService>();
-            services.AddTransient<IStatisticsService, StatisticsService>();
 
+            services.AddTransient<IStatisticsService, StatisticsService>();
             services
-                .AddIdentity<User, IdentityRole>(options =>
+                .AddDefaultIdentity<User>(options =>
                 {
                     options.Password.RequireDigit = false;
                     options.Password.RequireLowercase = false;
@@ -41,11 +39,17 @@ namespace CSGOMarketplace
                     options.Password.RequireUppercase = false;
                     options.User.RequireUniqueEmail = false;
                 })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<MarketplaceDbContext>()
                 .AddDefaultUI();
 
+            services.AddAutoMapper(typeof(Startup));
+
             services
                 .AddControllersWithViews();
+
+            services.AddAuthentication().AddSteam();
+            services.AddTransient<IItemService, ItemService>();
 
             services.AddRazorPages();
         }

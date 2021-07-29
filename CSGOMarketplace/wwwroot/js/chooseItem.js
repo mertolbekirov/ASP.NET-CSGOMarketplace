@@ -34,7 +34,12 @@
             card.classList.add('mb-2');
             let img = document.createElement('img');
             img.classList.add('card-img-top');
-            let iconUrl = `https://cdn.steamcommunity.com/economy/image/${item.icon_url_large}`;
+            let iconUrl = "";
+            if (item.icon_url_large == undefined) {
+                iconUrl = `https://cdn.steamcommunity.com/economy/image/${item.icon_url}`;
+            } else {
+                iconUrl = `https://cdn.steamcommunity.com/economy/image/${item.icon_url_large}`;
+            }
             img.src = iconUrl;
             img.alt = item.market_name;
             let cardCenterDiv = document.createElement('div');
@@ -45,7 +50,7 @@
             h5.classList.add('text-center');
             h5.textContent = item.market_name
             let a = document.createElement('a');
-            a.href = `/Items/Sell?s=${steamId}&a=${item.assetId}&d=${d}&iconurl=${item.icon_url_large}`;
+            a.href = `/Items/Sell?s=${steamId}&a=${item.assetId}&d=${d}&iconurl=${iconUrl}`;
             a.classList.add('btn');
             a.classList.add('btn-primary');
             a.textContent = 'Sell';

@@ -6,13 +6,15 @@
 
         public string Name { get; init; }
 
-        public double? Float { get; init; }
+        public double Float { get; init; }
 
-        public string Condition { get; init; }
+        public string ConditionName { get; init; }
 
         public string ImageUrl { get; init; }
-        public string InspectUrl { get; init; }
+        public string InspectUrl { get; set; }
 
-        public decimal Price { get; init; }
+        public string OwnerId { get; set; }
+
+        public decimal Price { get; set; }
     }
 }

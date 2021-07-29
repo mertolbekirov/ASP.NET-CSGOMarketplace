@@ -37,6 +37,7 @@ namespace CSGOMarketplace.Data
                 .Entity<Item>()
                 .HasOne(i => i.Owner)
                 .WithMany(u => u.Items)
+                .HasForeignKey(i => i.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
             
             base.OnModelCreating(builder);

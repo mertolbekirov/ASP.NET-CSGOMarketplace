@@ -51,23 +51,9 @@
     </div>
 </div>
 
-<div class="row">
-    @foreach (var item in Model.Items)
-    {
-        <div class="col-md-4">
-            <div class="card mb-3">
-                <img class="card-img-top" src="@item.ImageUrl" alt="@item.Name - @item.Condition">
-                <div class="card-body text-center">
-                    <h5 class="card-title text-center">@item.Name (@item.Condition)</h5>
-                    @if (item.Float != 0)
-                    {
-                    <h6 class="card-text">@item.Float.ToString().Substring(0,5)</h6>
-                    }
-                    <p class="card-text">$@item.Price</p>
-                    <a href="@item.InspectUrl" class="btn btn-warning">Inspect</a>
-                    <a asp-controller="Items" asp-action="Buy" asp-route-id="@item.Id" class="btn btn-primary">Buy</a>
-                </div>
-            </div>
-        </div>
-    }
-</div>
+@if (!Model.Items.Any())
+{
+    <h2 class="text-center">No cars found by the given criteria!</h2>
+}
+
+<partial name="_ItemsPartial" model="@Model.Items" />

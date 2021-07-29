@@ -29,7 +29,7 @@
                     <span asp-validation-for="Float" class="small text-danger"></span>
                 </div>
             }
-            
+
             <div class="form-group">
                 <label asp-for="Price">Price in USD ($)</label>
                 <input asp-for="Price" class="form-control" placeholder="199.99">
@@ -43,3 +43,7 @@
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

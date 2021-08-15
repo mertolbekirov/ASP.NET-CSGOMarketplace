@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CSGOMarketplace.Data
 {
@@ -18,6 +21,10 @@ namespace CSGOMarketplace.Data
         public DbSet<Item> Items { get; init; }
 
         public DbSet<Condition> Conditions { get; init; }
+
+        public DbSet<Sale> Sales { get; init; }
+
+        public DbSet<UserSale> UserSales { get; init; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -39,6 +46,9 @@ namespace CSGOMarketplace.Data
                 .WithMany(u => u.Items)
                 .HasForeignKey(i => i.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<UserSale>()
+                .HasKey(x => new {x.SaleId, x.UserId});
             
             base.OnModelCreating(builder);
         }

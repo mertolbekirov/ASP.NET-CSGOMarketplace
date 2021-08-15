@@ -6,7 +6,8 @@ namespace CSGOMarketplace.Data.Models
 {
     public class User : IdentityUser
     {
-        public ICollection<Item> Items { get; init; } = new List<Item>();
+        public IEnumerable<Item> Items { get; init; } = new List<Item>();
 
+        public IEnumerable<Sale> Sales { get; set; } = new List<Sale>();
     }
 }

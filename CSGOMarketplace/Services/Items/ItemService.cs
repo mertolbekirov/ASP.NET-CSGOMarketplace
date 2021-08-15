@@ -3,11 +3,13 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using CSGOMarketplace.Data;
 using CSGOMarketplace.Data.Models;
 using CSGOMarketplace.Models;
 using CSGOMarketplace.Services.Items.Models;
 using Newtonsoft.Json;
+using static CSGOMarketplace.Data.DataConstants;
 
 namespace CSGOMarketplace.Services.Items
 {
@@ -63,6 +65,15 @@ namespace CSGOMarketplace.Services.Items
                 Items = items
             };
         }
+
+        public IEnumerable<LatestItemServiceModel> Latest()
+            => this.data
+                .Items
+                .OrderByDescending(i => i.Id)
+                .ProjectTo<LatestItemServiceModel>(this.mapper.ConfigurationProvider)
+                .Take(3)
+                .ToList();
+            
 
         public int Sell(string name, decimal price, double floatValue, string imageUrl, string inspectUrl, string userId,
             string conditionName)

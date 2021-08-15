@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSGOMarketplace", "CSGOMarketplace\CSGOMarketplace.csproj", "{36FAA642-61A7-47E2-8141-B16D311E7316}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSGOMarketplace", "CSGOMarketplace\CSGOMarketplace.csproj", "{36FAA642-61A7-47E2-8141-B16D311E7316}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSGOMarketplace.Tests", "CSGOMarketplace.Tests\CSGOMarketplace.Tests.csproj", "{144A76B0-9ECC-47B5-A56E-DD344AF61DD4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{36FAA642-61A7-47E2-8141-B16D311E7316}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36FAA642-61A7-47E2-8141-B16D311E7316}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36FAA642-61A7-47E2-8141-B16D311E7316}.Release|Any CPU.Build.0 = Release|Any CPU
+		{144A76B0-9ECC-47B5-A56E-DD344AF61DD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{144A76B0-9ECC-47B5-A56E-DD344AF61DD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{144A76B0-9ECC-47B5-A56E-DD344AF61DD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{144A76B0-9ECC-47B5-A56E-DD344AF61DD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

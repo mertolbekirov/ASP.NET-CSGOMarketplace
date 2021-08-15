@@ -34,5 +34,7 @@ namespace CSGOMarketplace.Services.Items
         bool Edit(int id, decimal price);
 
         bool Delete(int id);
+
+        public IEnumerable<LatestItemServiceModel> Latest();
     }
 }

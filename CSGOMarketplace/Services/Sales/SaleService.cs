@@ -50,6 +50,32 @@ namespace CSGOMarketplace.Services.Sales
             return unresolvedModels;
         }
 
+        public IEnumerable<SaleServiceModel> Resolved()
+        {
+            var resolved = this.data
+                .Sales
+                .Include(x => x.UsersInvolved)
+                .Include(x => x.Item)
+                .ThenInclude(x => x.Condition)
+                .Where(x => x.IsResolved)
+                .ToList();
+
+            List<SaleServiceModel> unresolvedModels = new List<SaleServiceModel>();
+            foreach (var sale in resolved)
+            {
+                unresolvedModels.Add(new SaleServiceModel
+                {
+                    Id = sale.Id,
+                    ItemId = sale.ItemId,
+                    Item = mapper.Map<ItemServiceModel>(sale.Item),
+                    UsersInvolved = sale.UsersInvolved.Select(GetProviderKeyByUser).ToList()
+                });
+            }
+
+            return unresolvedModels;
+        }
+
+
         public bool Resolve(int saleId)
         {
             var sale = this.data.Sales.Find(saleId);

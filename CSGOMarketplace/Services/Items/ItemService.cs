@@ -202,6 +202,5 @@ namespace CSGOMarketplace.Services.Items
             data.SaveChanges();
             return true;
         }
-
     }
 }

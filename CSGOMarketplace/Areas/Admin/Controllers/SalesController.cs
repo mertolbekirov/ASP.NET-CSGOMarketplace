@@ -11,11 +11,18 @@ namespace CSGOMarketplace.Areas.Admin.Controllers
 
         public SalesController(ISaleService sales) => this.sales = sales;
 
-        public IActionResult ResolveSales()
+        public IActionResult UnresolvedSales()
         {
             var salesToResolve = this.sales.Unresolved();
 
             return View(salesToResolve);
+        }
+
+        public IActionResult ResolvedSales()
+        {
+            var resolvedSales = this.sales.Resolved();
+
+            return View(resolvedSales);
         }
 
         public IActionResult Resolve(int id)
@@ -26,7 +33,7 @@ namespace CSGOMarketplace.Areas.Admin.Controllers
                 return BadRequest();
             }
 
-            return RedirectToAction(nameof(ResolveSales));
+            return RedirectToAction(nameof(UnresolvedSales));
         }
 
         public IActionResult Delete(int id)
@@ -37,7 +44,7 @@ namespace CSGOMarketplace.Areas.Admin.Controllers
                 return BadRequest();
             }
 
-            return RedirectToAction(nameof(ResolveSales));
+            return RedirectToAction(nameof(UnresolvedSales));
         }
     }
 }

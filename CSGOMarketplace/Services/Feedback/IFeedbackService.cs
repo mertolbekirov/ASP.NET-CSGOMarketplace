@@ -7,6 +7,6 @@ namespace CSGOMarketplace.Services.Feedback
 {
     public interface IFeedbackService
     {
-        public bool Give(string userId);
+        public void Give(string title, string body, string userId);
     }
 }

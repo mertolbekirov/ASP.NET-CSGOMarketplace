@@ -1,15 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CSGOMarketplace.Data;
+using CSGOMarketplace.Data.Models;
 
 namespace CSGOMarketplace.Services.Feedback
 {
     public class FeedbackService : IFeedbackService
     {
-        public bool Give(string userId)
+        private readonly MarketplaceDbContext data;
+
+        public FeedbackService(MarketplaceDbContext data)
         {
-            throw new NotImplementedException();
+            this.data = data;
+        }
+
+        public void Give(string title, string body, string userId)
+        {
+            var feedback = new Data.Models.Feedback
+            {
+                Title = title,
+                Body = body,
+                UserId = userId
+            };
+
+
         }
     }
 }

@@ -132,7 +132,7 @@ namespace CSGOMarketplace.Services.Items
         public IEnumerable<ItemServiceModel> ByUser(string userId)
             => GetItems(this.data
                 .Items
-                .Where(c => c.UserId == userId));
+                .Where(x => x.UserId == userId && !x.IsSoldOrPendingSale));
 
         public ItemServiceModel ItemById(int id)
             => GetItems(this.data

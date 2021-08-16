@@ -25,7 +25,7 @@
             var item = Model[i];
             <div class="carousel-item @(i == 0 ? "active" : string.Empty)">
                 <img class="d-block w-100" src="@item.ImageUrl" alt="@item.Name">
-                <div class="carousel-caption d-none d-md-block text-success">
+                <div class="carousel-caption d-none d-md-block text-primary">
                     <h5>@item.Name @if (item.Condition != null){<span>(@item.Condition)</span>}</h5>
                 </div>
             </div>

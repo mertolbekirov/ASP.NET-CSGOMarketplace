@@ -9,5 +9,7 @@ namespace CSGOMarketplace.Data.Models
         public ICollection<Item> Items { get; init; } = new List<Item>();
 
         public ICollection<Sale> Sales { get; set; } = new List<Sale>();
+
+        public ICollection<Feedback> Feedback { get; set; } = new List<Feedback>();
     }
 }

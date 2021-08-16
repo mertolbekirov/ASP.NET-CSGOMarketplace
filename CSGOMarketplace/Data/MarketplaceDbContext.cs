@@ -18,6 +18,8 @@ namespace CSGOMarketplace.Data
 
         public DbSet<Sale> Sales { get; init; }
 
+        public DbSet<Feedback> Feedback { get; init; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Item>()
@@ -36,6 +38,13 @@ namespace CSGOMarketplace.Data
                 .HasOne(i => i.Owner)
                 .WithMany(u => u.Items)
                 .HasForeignKey(i => i.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Feedback>()
+                .HasOne(x => x.Creator)
+                .WithMany(x => x.Feedback)
+                .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);

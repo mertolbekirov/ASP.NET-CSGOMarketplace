@@ -1,6 +1,7 @@
 using CSGOMarketplace.Data;
 using CSGOMarketplace.Data.Models;
 using CSGOMarketplace.Infrastructure;
+using CSGOMarketplace.Services.Feedback;
 using CSGOMarketplace.Services.Items;
 using CSGOMarketplace.Services.Sales;
 using CSGOMarketplace.Services.Statistics;
@@ -52,6 +53,7 @@ namespace CSGOMarketplace
             services.AddAuthentication().AddSteam();
             services.AddTransient<IItemService, ItemService>();
             services.AddTransient<ISaleService, SaleService>();
+            services.AddTransient<IFeedbackService, FeedbackService>();
 
             services.AddRazorPages();
         }

@@ -1,0 +1,24 @@
+﻿@model IEnumerable<FeedbackServiceModel>
+
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">User Id</th>
+        <th scope="col">Title</th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var feedback in Model)
+    {
+        <tr>
+            <td scope="col">@feedback.UserId</td>
+            <td scope="col">@feedback.Title</td>
+            <td scope="col">
+                <a asp-area="Admin" asp-controller="Feedback" asp-action="Details" asp-route-id="@feedback.Id" class="btn btn-danger float-right ml-3">Details</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CSGOMarketplace.Data.Migrations
 {
     [DbContext(typeof(MarketplaceDbContext))]
-    [Migration("20210816152049_CreateFeedback")]
-    partial class CreateFeedback
+    [Migration("20210816162123_DataAnnotationsFeedbackEdit")]
+    partial class DataAnnotationsFeedbackEdit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -44,12 +44,15 @@ namespace CSGOMarketplace.Data.Migrations
                         .UseIdentityColumn();
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -344,7 +347,8 @@ namespace CSGOMarketplace.Data.Migrations
                     b.HasOne("CSGOMarketplace.Data.Models.User", "Creator")
                         .WithMany("Feedback")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Creator");
                 });

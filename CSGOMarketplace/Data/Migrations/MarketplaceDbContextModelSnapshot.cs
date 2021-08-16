@@ -41,11 +41,13 @@ namespace CSGOMarketplace.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<string>("Body")
+                    b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar(400)");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 

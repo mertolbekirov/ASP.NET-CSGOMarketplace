@@ -11,6 +11,8 @@
         public const int SamplePrice = 123;
 
         public const int MaxTitleFeedbackLength = 40;
+        public const int MinTitleFeedbackLength = 4;
         public const int MaxBodyFeedbackLength = 400;
+        public const int MinBodyFeedbackLength = 10;
     }
 }

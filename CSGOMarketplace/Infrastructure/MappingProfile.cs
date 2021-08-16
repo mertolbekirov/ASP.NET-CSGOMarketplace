@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using CSGOMarketplace.Data.Models;
 using CSGOMarketplace.Models.Items;
+using CSGOMarketplace.Services.Feedback.Models;
 using CSGOMarketplace.Services.Items.Models;
-using CSGOMarketplace.Services.Sales.Models;
 
 namespace CSGOMarketplace.Infrastructure
 {
@@ -18,6 +18,7 @@ namespace CSGOMarketplace.Infrastructure
             this.CreateMap<Item, LatestItemServiceModel>()
                 .ForMember(i => i.Condition, cfg => cfg.MapFrom(i => i.Condition.Name));
 
+            this.CreateMap<Feedback, FeedbackServiceModel>();
         }
     }
 }

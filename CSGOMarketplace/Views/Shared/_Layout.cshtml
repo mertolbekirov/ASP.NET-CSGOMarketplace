@@ -19,14 +19,17 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Items" asp-action="ChooseItem">Sell Item</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Items" asp-action="All">All Items</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Items" asp-action="Mine">My Items</a>
-                        </li>
+                        @if (this.User != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Items" asp-action="ChooseItem">Sell Item</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Items" asp-action="Mine">My Items</a>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -41,7 +44,10 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - CSGOMarketplace - <a class="" asp-controller="Feedback" asp-action="GiveFeedback">Give us feedback</a>
+            &copy; 2021 - CSGOMarketplace @if (this.User != null)
+                                          {
+                                              <a class="float-right" asp-area="" asp-controller="Feedback" asp-action="GiveFeedback">Give us feedback</a>
+                                          }
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

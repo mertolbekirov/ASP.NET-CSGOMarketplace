@@ -10,6 +10,7 @@ namespace CSGOMarketplace.Services.Sales
         public IEnumerable<SaleServiceModel> Resolved();
 
         public bool Resolve(int saleId);
+        public bool Unresolve(int saleId);
 
         public bool Delete(int saleId);
     }

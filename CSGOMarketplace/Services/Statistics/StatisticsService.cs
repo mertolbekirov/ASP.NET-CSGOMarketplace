@@ -21,10 +21,15 @@ namespace CSGOMarketplace.Services.Statistics
 
             var totalUsers = this.data.Users.Count();
 
+            var totalResolvedSales = this.data
+                .Sales
+                .Count(x => x.IsResolved);
+
             return new StatisticsServiceModel
             {
                 TotalItems = totalItems,
-                TotalUsers = totalUsers
+                TotalUsers = totalUsers,
+                TotalSales = totalResolvedSales
             };
         }
     }

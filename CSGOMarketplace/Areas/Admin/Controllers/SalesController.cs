@@ -15,12 +15,16 @@ namespace CSGOMarketplace.Areas.Admin.Controllers
         {
             var salesToResolve = this.sales.Unresolved();
 
+            ViewBag.Unresolved = true;
+
             return View(salesToResolve);
         }
-
+            
         public IActionResult ResolvedSales()
         {
             var resolvedSales = this.sales.Resolved();
+
+            ViewBag.Resolved = true;
 
             return View(resolvedSales);
         }
@@ -34,6 +38,17 @@ namespace CSGOMarketplace.Areas.Admin.Controllers
             }
 
             return RedirectToAction(nameof(UnresolvedSales));
+        }
+
+        public IActionResult Unresolve(int id)
+        {
+            var isUnresolved = this.sales.Unresolve(id);
+            if (!isUnresolved)
+            {
+                return BadRequest();
+            }
+
+            return RedirectToAction(nameof(ResolvedSales));
         }
 
         public IActionResult Delete(int id)

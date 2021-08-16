@@ -88,6 +88,19 @@ namespace CSGOMarketplace.Services.Sales
             return true;
         }
 
+        public bool Unresolve(int saleId)
+        {
+            var sale = this.data.Sales.Find(saleId);
+            if (sale == null)
+            {
+                return false;
+            }
+            sale.IsResolved = false;
+            this.data.SaveChanges();
+            return true;
+        }
+
+
         public bool Delete(int saleId)
         {
             var sale = this.data.Sales.Find(saleId);

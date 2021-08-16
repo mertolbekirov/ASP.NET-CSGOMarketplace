@@ -26,7 +26,14 @@
                 <td scope="col">$@sale.GetPrice()</td>
                 <td scope="col">
                     <a asp-area="Admin" asp-controller="Sales" asp-action="Delete" asp-route-id="@sale.Id" class="btn btn-danger float-right ml-3">Delete</a>
-                    <a asp-area="Admin" asp-controller="Sales" asp-action="Resolve" asp-route-id="@sale.Id" class="btn btn-warning float-right ml-3">Resolve</a>
+                    @if (ViewBag.Resolved == true)
+                    {
+                        <a asp-area="Admin" asp-controller="Sales" asp-action="Unresolve" asp-route-id="@sale.Id" class="btn btn-warning float-right ml-3">Unresolve</a>
+                    }
+                    else
+                    {
+                        <a asp-area="Admin" asp-controller="Sales" asp-action="Resolve" asp-route-id="@sale.Id" class="btn btn-warning float-right ml-3">Resolve</a>
+                    }
                 </td>
             </tr>
         }

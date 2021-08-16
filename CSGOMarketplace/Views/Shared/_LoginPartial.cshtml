@@ -10,8 +10,14 @@
 
     if (userIsAdmin)
     {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Sales" asp-action="UnresolvedSales">Resolve Sales</a>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Administration Panel
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Sales" asp-action="UnresolvedSales">Unresolved Sales</a>
+                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Sales" asp-action="ResolvedSales">Resolved Sales</a>
+            </div>
         </li>
     }
 

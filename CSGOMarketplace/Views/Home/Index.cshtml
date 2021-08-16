@@ -53,6 +53,7 @@
     <div class="row">
         <h2 class="col-md-4 text-center" id="total-items"></h2>
         <h2 class="col-md-4 text-center" id="total-users"></h2>
+        <h2 class="col-md-4 text-center" id="total-sales"></h2>
     </div>
 </div>
 
@@ -62,6 +63,7 @@
             $.get('/api/statistics', (data) => {
                 $('#total-items').text(data.totalItems + " Items");
                 $('#total-users').text(data.totalUsers + " Users");
+                $('#total-sales').text(data.totalSales + " Sales");
                 $('#statistics').removeClass('d-none');
                 $('#statistics-button').hide();
             });

@@ -2,6 +2,7 @@ using CSGOMarketplace.Data;
 using CSGOMarketplace.Data.Models;
 using CSGOMarketplace.Infrastructure;
 using CSGOMarketplace.Services.Items;
+using CSGOMarketplace.Services.Sales;
 using CSGOMarketplace.Services.Statistics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -50,6 +51,7 @@ namespace CSGOMarketplace
 
             services.AddAuthentication().AddSteam();
             services.AddTransient<IItemService, ItemService>();
+            services.AddTransient<ISaleService, SaleService>();
 
             services.AddRazorPages();
         }
@@ -77,6 +79,7 @@ namespace CSGOMarketplace
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
+                    endpoints.MapDefaultAreaRoute();
                     endpoints.MapDefaultControllerRoute();
                     endpoints.MapRazorPages();
                 });

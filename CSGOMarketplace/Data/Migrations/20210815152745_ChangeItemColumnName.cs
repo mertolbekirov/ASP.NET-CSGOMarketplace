@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CSGOMarketplace.Data.Migrations
 {
-    public partial class SetOwnerProperly : Migration
+    public partial class ChangeItemColumnName : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -177,7 +177,7 @@ namespace CSGOMarketplace.Data.Migrations
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     InspectUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(15,2)", precision: 15, scale: 2, nullable: false),
-                    IsSold = table.Column<bool>(type: "bit", nullable: false),
+                    IsSoldOrPendingSale = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -195,6 +195,50 @@ namespace CSGOMarketplace.Data.Migrations
                         principalTable: "Conditions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Sales",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ItemId = table.Column<int>(type: "int", nullable: false),
+                    IsResolved = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sales", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Sales_Items_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SaleUser",
+                columns: table => new
+                {
+                    SalesId = table.Column<int>(type: "int", nullable: false),
+                    UsersInvolvedId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SaleUser", x => new { x.SalesId, x.UsersInvolvedId });
+                    table.ForeignKey(
+                        name: "FK_SaleUser_AspNetUsers_UsersInvolvedId",
+                        column: x => x.UsersInvolvedId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SaleUser_Sales_SalesId",
+                        column: x => x.SalesId,
+                        principalTable: "Sales",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -245,6 +289,16 @@ namespace CSGOMarketplace.Data.Migrations
                 name: "IX_Items_UserId",
                 table: "Items",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sales_ItemId",
+                table: "Sales",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SaleUser_UsersInvolvedId",
+                table: "SaleUser",
+                column: "UsersInvolvedId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -265,10 +319,16 @@ namespace CSGOMarketplace.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Items");
+                name: "SaleUser");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Sales");
+
+            migrationBuilder.DropTable(
+                name: "Items");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

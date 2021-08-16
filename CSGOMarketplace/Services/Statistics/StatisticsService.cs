@@ -17,7 +17,7 @@ namespace CSGOMarketplace.Services.Statistics
         {
             var totalItems = this.data
                 .Items
-                .Count(i => !i.IsSold);
+                .Count(i => !i.IsSoldOrPendingSale);
 
             var totalUsers = this.data.Users.Count();
 

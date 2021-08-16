@@ -24,9 +24,14 @@ namespace CSGOMarketplace.Services.Items
             this.mapper = mapper;
         }
 
-        public ItemQueryServiceModel All(string searchTerm, ItemSorting sorting, int currentPage, int itemsPerPage)
+        public ItemQueryServiceModel All(
+            string searchTerm = null,
+            ItemSorting sorting = ItemSorting.Price,
+            int currentPage = 1,
+            int itemsPerPage = int.MaxValue,
+            bool publicOnly = true)
         {
-            var itemsQuery = this.data.Items.Where(x => !x.IsSold).AsQueryable();
+            var itemsQuery = this.data.Items.Where(x => !publicOnly || !x.IsSoldOrPendingSale).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
@@ -53,7 +58,8 @@ namespace CSGOMarketplace.Services.Items
                     Name = item.Name,
                     Float = item.Float ?? 0,
                     ConditionName = item.Condition.Name,
-                    InspectUrl = item.InspectUrl
+                    InspectUrl = item.InspectUrl,
+                    OwnerId = item.UserId
                 })
                 .ToList();
 
@@ -176,6 +182,23 @@ namespace CSGOMarketplace.Services.Items
                 return false;
             }
             data.Items.Remove(itemData);
+            data.SaveChanges();
+            return true;
+        }
+
+        public bool Buy(int itemId, string buyerId)
+        {
+            var item = this.data.Items.Find(itemId);
+            var buyer = this.data.Users.Find(buyerId);
+
+            var sale = new Sale()
+            {
+                ItemId = item.Id,
+            };
+            sale.UsersInvolved.Add(this.data.Users.Find(item.UserId));
+            sale.UsersInvolved.Add(buyer);
+            item.IsSoldOrPendingSale = true;
+            data.Sales.Add(sale);
             data.SaveChanges();
             return true;
         }

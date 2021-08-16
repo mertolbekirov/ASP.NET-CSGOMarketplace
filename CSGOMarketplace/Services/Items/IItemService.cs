@@ -9,10 +9,11 @@ namespace CSGOMarketplace.Services.Items
     public interface IItemService
     {
         ItemQueryServiceModel All(
-            string searchTerm,
-            ItemSorting sorting,
-            int currentPage,
-            int itemsPerPage);
+            string searchTerm = null,
+            ItemSorting sorting = ItemSorting.Price,
+            int currentPage = 1,
+            int itemsPerPage = int.MaxValue,
+            bool publicOnly = true);
 
         int Sell(
             string name,
@@ -36,5 +37,7 @@ namespace CSGOMarketplace.Services.Items
         bool Delete(int id);
 
         public IEnumerable<LatestItemServiceModel> Latest();
+
+        public bool Buy(int itemId, string buyerId);
     }
 }

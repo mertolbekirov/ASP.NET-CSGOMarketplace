@@ -42,7 +42,7 @@ namespace CSGOMarketplace.Controllers
         [Authorize]
         public async Task<IActionResult> ChooseItem()
         {
-            var providerKey = await this.GetProviderKey();
+            var providerKey = await this.GetProviderKeyByClaims();
             if (providerKey == null)
             {
                 return BadRequest();
@@ -167,7 +167,28 @@ namespace CSGOMarketplace.Controllers
             return RedirectToAction(nameof(All));
         }
 
-        private async Task<string> GetProviderKey()
+        public async Task<IActionResult> Buy(int id)
+        {
+            var buyerId = this.User.Id();
+
+            var item = this.items.ItemById(id);
+
+            if (await GetProviderKeyByClaims() == null)
+            {
+                return Unauthorized();
+            }
+
+            if (item == null || buyerId == item.OwnerId)
+            {
+                return BadRequest();
+            }
+
+            this.items.Buy(id, buyerId);
+
+            return RedirectToAction(nameof(All));
+        }
+
+        private async Task<string> GetProviderKeyByClaims()
         {
             var user = await this.userManager.GetUserAsync(this.User);
             var logins = await userManager.GetLoginsAsync(user);

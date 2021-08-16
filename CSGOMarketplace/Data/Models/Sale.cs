@@ -14,7 +14,7 @@ namespace CSGOMarketplace.Data.Models
 
         public Item Item { get; set; }
 
-        public IEnumerable<User> UsersInvolved { get; set; } = new List<User>();
+        public IList<User> UsersInvolved { get; set; } = new List<User>();
 
         public bool IsResolved { get; set; }
     }

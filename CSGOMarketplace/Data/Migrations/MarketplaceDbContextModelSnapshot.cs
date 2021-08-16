@@ -55,7 +55,7 @@ namespace CSGOMarketplace.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsSold")
+                    b.Property<bool>("IsSoldOrPendingSale")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -162,24 +162,6 @@ namespace CSGOMarketplace.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("CSGOMarketplace.Data.Models.UserSale", b =>
-                {
-                    b.Property<int>("SaleId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("SaleId", "UserId");
-
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("UserSales");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -358,23 +340,6 @@ namespace CSGOMarketplace.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Item");
-                });
-
-            modelBuilder.Entity("CSGOMarketplace.Data.Models.UserSale", b =>
-                {
-                    b.HasOne("CSGOMarketplace.Data.Models.Sale", "Sale")
-                        .WithMany()
-                        .HasForeignKey("SaleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CSGOMarketplace.Data.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1");
-
-                    b.Navigation("Sale");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

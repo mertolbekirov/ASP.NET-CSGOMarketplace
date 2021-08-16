@@ -1,0 +1,40 @@
+﻿@model IEnumerable<SaleServiceModel>
+
+@{
+    ViewBag.Title = "Sales Administration";
+}
+
+<h1>All Sales</h1>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Seller</th>
+            <th scope="col">Buyer</th>
+            <th scope="col">Name</th>
+            <th scope="col">Condition</th>
+            <th scope="col">Float</th>
+            <th scope="col">Price</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var sale in Model)
+    {
+        <tr>
+            <td scope="col">@sale.Id</td>
+            <td scope="col">@sale.UsersInvolved[0]</td>
+            <td scope="col">@sale.UsersInvolved[1]</td>
+            <td scope="col">@sale.Item.Name</td>
+            <td scope="col">@sale.Item.ConditionName</td>
+            <td scope="col">@sale.Item.Float</td>
+            <td scope="col">$@sale.GetPrice()</td>
+            <td scope="col">
+                <a asp-area="Admin" asp-controller="Sales" asp-action="Delete" asp-route-id="@sale.Id" class="btn btn-danger float-right ml-3">Delete</a>
+                <a asp-area="Admin" asp-controller="Sales" asp-action="Resolve" asp-route-id="@sale.Id" class="btn btn-warning float-right ml-3">Resolve</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

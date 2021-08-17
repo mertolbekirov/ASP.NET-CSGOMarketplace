@@ -7,23 +7,28 @@
             <div class="card mb-3">
                 <img class="card-img-top" src="@item.ImageUrl" alt="@item.Name - @item.ConditionName">
                 <div class="card-body text-center">
-                    <h5 class="card-title text-center">@item.Name @if(item.ConditionName != null) {<span>(@item.ConditionName)</span>}</h5>
+                    <h5 class="card-title text-center">@item.Name @if (item.ConditionName != null)
+                    {<span>(@item.ConditionName)</span>}</h5>
                     @if (item.Float != 0)
                     {
                         <h6 class="card-text">@item.Float.ToString().Substring(0, 5)</h6>
                     }
 
                     <p class="card-text">$@item.Price</p>
-                    @if (ViewBag.AllowCarEdit == true || User.IsAdmin())
+                    @if (ViewBag.AllowCarEdit == true || (this.User.Identity.IsAuthenticated && User.IsAdmin()))
                     {
                         <a asp-controller="Items" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
                         <a asp-controller="Items" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
                     }
                     <a href="@item.InspectUrl" class="btn btn-warning">Inspect</a>
-                    @if (this.User.Id() != item.OwnerId)
+                    @if (this.User.Identity.IsAuthenticated)
                     {
-                        <a asp-controller="Items" asp-action="Buy" asp-route-id="@item.Id" class="btn btn-primary">Buy</a>
+                        @if (this.User.Id() != item.OwnerId)
+                        {
+                            <a asp-controller="Items" asp-action="Buy" asp-route-id="@item.Id" class="btn btn-primary">Buy</a>
+                        }
                     }
+
                 </div>
             </div>
         </div>

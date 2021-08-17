@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 
+using static CSGOMarketplace.WebConstants;
+
 namespace CSGOMarketplace.Controllers
 {
     public class ItemsController : Controller
@@ -45,7 +47,9 @@ namespace CSGOMarketplace.Controllers
             var providerKey = await this.GetProviderKeyByClaims();
             if (providerKey == null)
             {
-                return BadRequest();
+                TempData[GlobalMessageKey] = "Sign in with Steam to unlock this feature.";
+
+                return RedirectToAction(nameof(All));
             }
 
             return View(new ChooseItemViewModel()
@@ -99,6 +103,8 @@ namespace CSGOMarketplace.Controllers
 
             this.items.Edit(id, car.Price);
 
+            TempData[GlobalMessageKey] = "The price of your item was edited successfully";
+
             return RedirectToAction(nameof(All));
         }
 
@@ -146,6 +152,8 @@ namespace CSGOMarketplace.Controllers
                 this.User.Id(),
                 csgoFloatItem.ConditionName);
 
+            TempData[GlobalMessageKey] = "Your item was put for sale successfully";
+
             return RedirectToAction(nameof(All));
         }
 
@@ -168,6 +176,8 @@ namespace CSGOMarketplace.Controllers
 
             this.items.Delete(id);
 
+            TempData[GlobalMessageKey] = "Item was deleted successfully";
+
             return RedirectToAction(nameof(All));
         }
 
@@ -179,7 +189,9 @@ namespace CSGOMarketplace.Controllers
 
             if (await GetProviderKeyByClaims() == null)
             {
-                return Unauthorized();
+                TempData[GlobalMessageKey] = "Sign in with Steam to unlock this feature.";
+
+                return RedirectToAction(nameof(All));
             }
 
             if (item == null || buyerId == item.OwnerId)
@@ -188,6 +200,8 @@ namespace CSGOMarketplace.Controllers
             }
 
             this.items.Buy(id, buyerId);
+
+            TempData[GlobalMessageKey] = "You successfully requested to buy the item. Be ready to be contacted by and admin via steam to complete the exchange.";
 
             return RedirectToAction(nameof(All));
         }

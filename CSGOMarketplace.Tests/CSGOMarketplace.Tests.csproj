@@ -21,8 +21,10 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CSGOMarketplace\CSGOMarketplace.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\CSGOMarketplace\CSGOMarketplace.csproj" />
+	</ItemGroup>
 
 </Project>
+
+

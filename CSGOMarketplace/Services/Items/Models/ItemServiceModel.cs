@@ -10,7 +10,7 @@
 
         public string ConditionName { get; init; }
 
-        public string ImageUrl { get; init; }
+        public string ImageUrl { get; set; }
         public string InspectUrl { get; set; }
 
         public string OwnerId { get; set; }

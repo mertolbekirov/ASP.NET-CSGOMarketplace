@@ -25,6 +25,8 @@ namespace CSGOMarketplace.Services.Items
             string conditionName);
 
         Task<ItemServiceModel> CSGOFloatItemInfo(string steamId, string assetId, string d);
+        Task<string> GetItemImageUrl(string marketHashName);
+
 
         IEnumerable<ItemServiceModel> ByUser(string userId);
 

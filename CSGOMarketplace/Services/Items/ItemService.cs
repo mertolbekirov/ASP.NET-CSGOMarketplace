@@ -9,6 +9,7 @@ using CSGOMarketplace.Data.Models;
 using CSGOMarketplace.Models;
 using CSGOMarketplace.Services.Items.Models;
 using Newtonsoft.Json;
+
 using static CSGOMarketplace.Data.DataConstants;
 
 namespace CSGOMarketplace.Services.Items
@@ -127,6 +128,25 @@ namespace CSGOMarketplace.Services.Items
             item.InspectUrl = DataConstants.SteamItemInspectUrl + $"S{steamId}A{assetId}D{d}";
             item.Price = DataConstants.SamplePrice;
             return item;
+        }
+
+        public async Task<string> GetItemImageUrl(string marketHashName)
+        {
+            var imageResponse = DataConstants.GetImageSteamApi + marketHashName;
+            HttpClient client = new HttpClient();
+            var response = await client.GetAsync(imageResponse);
+            string json = null;
+            if (response.IsSuccessStatusCode)
+            {
+                json = await response.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                return null;
+            }
+            var itemInfo = JsonConvert.DeserializeObject(json);
+            var asString = itemInfo.ToString();
+            return asString;
         }
 
         public IEnumerable<ItemServiceModel> ByUser(string userId)

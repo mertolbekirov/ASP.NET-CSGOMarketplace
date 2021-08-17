@@ -127,17 +127,23 @@ namespace CSGOMarketplace.Controllers
             }
             var queryParams = item.InspectUrl.Split(new char[] {'S', 'A', 'D'});
             var csgoFloatItem = await this.items.CSGOFloatItemInfo(queryParams[1], queryParams[2], queryParams[3]);
+           
 
             if (csgoFloatItem == null)
             {
                 return BadRequest();
             }
 
+            if (csgoFloatItem.ImageUrl == null)
+            {
+                csgoFloatItem.ImageUrl = DataConstants.GetImageSteamApi + csgoFloatItem.Name;
+            }
+
             this.items.Sell(
                 csgoFloatItem.Name,
                 item.Price,
                 csgoFloatItem.Float,
-                item.ImageUrl,
+                csgoFloatItem.ImageUrl,
                 item.InspectUrl,
                 this.User.Id(),
                 csgoFloatItem.ConditionName);

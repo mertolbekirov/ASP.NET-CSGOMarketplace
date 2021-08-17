@@ -17,7 +17,7 @@ namespace CSGOMarketplace.Tests.Controllers
         public void IndexShouldReturnCorrectViewWithModel()
             => MyController<HomeController>
                 .Instance(controller => controller
-                    .WithData(TenPublicCars))
+                    .WithData(TenPublicItems))
                 .Calling(c => c.Index())
                 .ShouldHave()
                 .MemoryCache(cache => cache

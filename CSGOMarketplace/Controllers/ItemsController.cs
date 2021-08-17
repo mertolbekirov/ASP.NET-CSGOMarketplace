@@ -80,7 +80,6 @@ namespace CSGOMarketplace.Controllers
             }
 
             var itemForm = this.mapper.Map<ItemFormModel>(item);
-
             return View(itemForm);
         }
 
@@ -120,7 +119,6 @@ namespace CSGOMarketplace.Controllers
         [Authorize]
         public async Task<IActionResult> Sell(ItemFormModel item)
         {
-            //TODO: Defend from non-marketable items
             if (!ModelState.IsValid)
             {
                 return View(item);

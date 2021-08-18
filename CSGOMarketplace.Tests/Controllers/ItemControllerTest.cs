@@ -1,11 +1,11 @@
 ﻿using System.Linq;
+using System.Collections.Generic;
 using MyTested.AspNetCore.Mvc;
 using Xunit;
 using FluentAssertions;
 using CSGOMarketplace.Controllers;
 using CSGOMarketplace.Models.Items;
 using CSGOMarketplace.Data.Models;
-using System.Collections.Generic;
 using CSGOMarketplace.Services.Items.Models;
 using static CSGOMarketplace.Tests.Data.Items;
 using static CSGOMarketplace.Tests.Data.Conditions;

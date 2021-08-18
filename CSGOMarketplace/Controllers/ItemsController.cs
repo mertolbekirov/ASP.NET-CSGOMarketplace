@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
-using CSGOMarketplace.Data;
-using CSGOMarketplace.Data.Models;
-using CSGOMarketplace.Infrastructure;
-using CSGOMarketplace.Models.Items;
-using CSGOMarketplace.Services.Items;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 using CSGOMarketplace.Services.Items.Models;
+using CSGOMarketplace.Data;
+using CSGOMarketplace.Data.Models;
+using CSGOMarketplace.Infrastructure;
+using CSGOMarketplace.Models.Items;
+using CSGOMarketplace.Services.Items;
 using static CSGOMarketplace.WebConstants;
 
 namespace CSGOMarketplace.Controllers

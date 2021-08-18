@@ -1,7 +1,7 @@
-﻿using CSGOMarketplace.Models.Api.Items;
+﻿using Microsoft.AspNetCore.Mvc;
+using CSGOMarketplace.Models.Api.Items;
 using CSGOMarketplace.Services.Items;
 using CSGOMarketplace.Services.Items.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace CSGOMarketplace.Controllers.Api
 {

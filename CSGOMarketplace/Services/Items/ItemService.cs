@@ -4,13 +4,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Newtonsoft.Json;
 using CSGOMarketplace.Data;
 using CSGOMarketplace.Data.Models;
 using CSGOMarketplace.Models;
 using CSGOMarketplace.Services.Items.Models;
-using Newtonsoft.Json;
-
-using static CSGOMarketplace.Data.DataConstants;
 
 namespace CSGOMarketplace.Services.Items
 {

@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using CSGOMarketplace.Areas.Admin.Services.Sales.Models;
 using CSGOMarketplace.Data;
 using CSGOMarketplace.Data.Models;
 using CSGOMarketplace.Services.Items.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace CSGOMarketplace.Areas.Admin.Services.Sales
 {
@@ -57,6 +57,7 @@ namespace CSGOMarketplace.Areas.Admin.Services.Sales
                 .Include(x => x.Item)
                 .ThenInclude(x => x.Condition)
                 .Where(x => x.IsResolved)
+                .OrderByDescending(x => x.Id)
                 .ToList();
 
             List<SaleServiceModel> unresolvedModels = new List<SaleServiceModel>();

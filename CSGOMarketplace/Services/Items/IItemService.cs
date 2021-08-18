@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 using CSGOMarketplace.Models;
 using CSGOMarketplace.Services.Items.Models;

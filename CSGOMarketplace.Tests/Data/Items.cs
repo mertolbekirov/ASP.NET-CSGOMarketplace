@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using MyTested.AspNetCore.Mvc;
 using CSGOMarketplace.Data.Models;
 using CSGOMarketplace.Models.Items;
-using MyTested.AspNetCore.Mvc;
 
 namespace CSGOMarketplace.Tests.Data
 {

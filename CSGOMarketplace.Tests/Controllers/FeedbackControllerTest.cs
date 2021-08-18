@@ -1,7 +1,7 @@
-﻿using CSGOMarketplace.Controllers;
-using CSGOMarketplace.Models.Feedback;
-using MyTested.AspNetCore.Mvc;
+﻿using MyTested.AspNetCore.Mvc;
 using Xunit;
+using CSGOMarketplace.Controllers;
+using CSGOMarketplace.Models.Feedback;
 
 namespace CSGOMarketplace.Tests.Controllers
 {
@@ -38,5 +38,7 @@ namespace CSGOMarketplace.Tests.Controllers
                 .ShouldReturn()
                 .Redirect(redirect => redirect
                     .To<ItemsController>(c => c.All(null)));
+
+
     }   
 }

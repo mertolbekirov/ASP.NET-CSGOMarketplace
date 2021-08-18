@@ -15,7 +15,7 @@
                     }
 
                     <p class="card-text">$@item.Price</p>
-                    @if (ViewBag.AllowCarEdit == true || (this.User.Identity.IsAuthenticated && User.IsAdmin()))
+                    @if (this.User.Identity.IsAuthenticated && User.IsAdmin() || item.OwnerId == this.User.Id())
                     {
                         <a asp-controller="Items" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
                         <a asp-controller="Items" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>

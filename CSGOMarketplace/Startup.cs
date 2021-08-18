@@ -1,9 +1,9 @@
+using CSGOMarketplace.Areas.Admin.Services.Sales;
 using CSGOMarketplace.Data;
 using CSGOMarketplace.Data.Models;
 using CSGOMarketplace.Infrastructure;
 using CSGOMarketplace.Services.Feedback;
 using CSGOMarketplace.Services.Items;
-using CSGOMarketplace.Services.Sales;
 using CSGOMarketplace.Services.Statistics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

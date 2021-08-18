@@ -2,15 +2,14 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using CSGOMarketplace.Areas.Admin.Services.Sales.Models;
 using CSGOMarketplace.Data;
 using CSGOMarketplace.Data.Models;
 using CSGOMarketplace.Services.Items.Models;
-using CSGOMarketplace.Services.Sales.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace CSGOMarketplace.Services.Sales
+namespace CSGOMarketplace.Areas.Admin.Services.Sales
 {
     public class SaleService : ISaleService
     {

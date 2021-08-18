@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using CSGOMarketplace.Data.Models;
 using CSGOMarketplace.Services.Items.Models;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSGOMarketplace.Services.Sales.Models
+namespace CSGOMarketplace.Areas.Admin.Services.Sales.Models
 {
     public class SaleServiceModel
     {

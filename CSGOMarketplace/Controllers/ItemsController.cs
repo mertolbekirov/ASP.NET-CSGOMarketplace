@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
-
+using CSGOMarketplace.Services.Items.Models;
 using static CSGOMarketplace.WebConstants;
 
 namespace CSGOMarketplace.Controllers
@@ -111,12 +111,13 @@ namespace CSGOMarketplace.Controllers
         [Authorize]
         public async Task<IActionResult> Sell([FromQuery]SellItemQueryModel query)
         {
-            var csgofloatItem = await this.items.CSGOFloatItemInfo(query.S, query.A, query.D);
-            if (csgofloatItem == null)
+            var csgoFloatItemInfo = await this.items.CSGOFloatItemInfo(query.S, query.A, query.D);
+            if (csgoFloatItemInfo == null)
             {
                 return BadRequest();
             }
-            var item = this.mapper.Map<ItemFormModel>(csgofloatItem);
+            ReplaceCSGOFloatItemImageUrl(csgoFloatItemInfo);
+            var item = this.mapper.Map<ItemFormModel>(csgoFloatItemInfo);
             item.ImageUrl = query.IconUrl;
             return View(item);
         }
@@ -130,27 +131,24 @@ namespace CSGOMarketplace.Controllers
                 return View(item);
             }
             var queryParams = item.InspectUrl.Split(new char[] {'S', 'A', 'D'});
-            var csgoFloatItem = await this.items.CSGOFloatItemInfo(queryParams[1], queryParams[2], queryParams[3]);
+            var csgoFloatItemInfo = await this.items.CSGOFloatItemInfo(queryParams[1], queryParams[2], queryParams[3]);
            
 
-            if (csgoFloatItem == null)
+            if (csgoFloatItemInfo == null)
             {
                 return BadRequest();
-            }
-
-            if (csgoFloatItem.ImageUrl == null)
-            {
-                csgoFloatItem.ImageUrl = DataConstants.GetImageSteamApi + csgoFloatItem.Name;
-            }
+            } 
+            
+            ReplaceCSGOFloatItemImageUrl(csgoFloatItemInfo);
 
             this.items.Sell(
-                csgoFloatItem.Name,
+                csgoFloatItemInfo.Name,
                 item.Price,
-                csgoFloatItem.Float,
-                csgoFloatItem.ImageUrl,
+                csgoFloatItemInfo.Float,
+                csgoFloatItemInfo.ImageUrl,
                 item.InspectUrl,
                 this.User.Id(),
-                csgoFloatItem.ConditionName);
+                csgoFloatItemInfo.ConditionName);
 
             TempData[GlobalMessageKey] = "Your item was put for sale successfully";
 
@@ -220,6 +218,19 @@ namespace CSGOMarketplace.Controllers
             return null;
         }
 
-       
+        private void ReplaceCSGOFloatItemImageUrl(ItemServiceModel csgoFloatItem)
+        {
+            if (csgoFloatItem.ConditionName == null)
+            {
+                csgoFloatItem.ImageUrl = DataConstants.GetImageSteamApi + csgoFloatItem.Name;
+            }
+            else
+            {
+                csgoFloatItem.ImageUrl = DataConstants.GetImageSteamApi + csgoFloatItem.Name + " (" +
+                                         csgoFloatItem.ConditionName + ")";
+
+            }
+        }
+
     }
 }

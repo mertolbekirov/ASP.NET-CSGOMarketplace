@@ -1,6 +1,4 @@
-﻿using CSGOMarketplace.Controllers;
-using CSGOMarketplace.Services.Items;
-using CSGOMarketplace.Services.Sales;
+﻿using CSGOMarketplace.Areas.Admin.Services.Sales;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CSGOMarketplace.Areas.Admin.Controllers
@@ -59,7 +57,12 @@ namespace CSGOMarketplace.Areas.Admin.Controllers
                 return BadRequest();
             }
 
-            return RedirectToAction(nameof(UnresolvedSales));
+            if (ControllerContext.ActionDescriptor.AttributeRouteInfo != null && ControllerContext.ActionDescriptor.AttributeRouteInfo.Name.Contains("Unresolved"))
+            {
+                return RedirectToAction(nameof(UnresolvedSales));
+            }
+            
+            return RedirectToAction(nameof(ResolvedSales));
         }
     }
 }

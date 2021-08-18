@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using CSGOMarketplace.Services.Sales.Models;
+using CSGOMarketplace.Areas.Admin.Services.Sales.Models;
 
-namespace CSGOMarketplace.Services.Sales
+namespace CSGOMarketplace.Areas.Admin.Services.Sales
 {
     public interface ISaleService
     {

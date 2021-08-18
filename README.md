@@ -12,6 +12,7 @@ Each **Admin** has an administration panel where they can resolve sales (complet
 
 
 ## Apis used
+- **[Steam (Official apis)](https://steamcommunity.com/)**
 - **[CSGOFloat](https://github.com/csgofloat/CSGOFloat-Inspect)**
 - **[SteamApis](https://steamapis.com/)** 
 <br />

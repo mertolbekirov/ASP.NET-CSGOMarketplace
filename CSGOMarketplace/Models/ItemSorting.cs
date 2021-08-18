@@ -2,7 +2,10 @@
 {
     public enum ItemSorting
     {
-        Price = 0,
-        Float = 1,
+        PriceAscending = 0,
+        PriceDescending = 1,
+        FloatAscending = 2,
+        FloatDescending = 3,
+        Newest = 4,
     }
 }

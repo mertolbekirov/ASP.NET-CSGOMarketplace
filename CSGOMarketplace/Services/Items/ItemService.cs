@@ -27,7 +27,7 @@ namespace CSGOMarketplace.Services.Items
 
         public ItemQueryServiceModel All(
             string searchTerm = null,
-            ItemSorting sorting = ItemSorting.Price,
+            ItemSorting sorting = ItemSorting.Newest,
             int currentPage = 1,
             int itemsPerPage = int.MaxValue,
             bool publicOnly = true)
@@ -42,8 +42,11 @@ namespace CSGOMarketplace.Services.Items
 
             itemsQuery = sorting switch
             {
-                ItemSorting.Float => itemsQuery.OrderByDescending(item => item.Float),
-                ItemSorting.Price or _ => itemsQuery.OrderByDescending(item => item.Price)
+                ItemSorting.FloatAscending => itemsQuery.OrderBy(item => item.Float),
+                ItemSorting.FloatDescending => itemsQuery.OrderByDescending(item => item.Float),
+                ItemSorting.PriceAscending => itemsQuery.OrderBy(item => item.Price),
+                ItemSorting.PriceDescending => itemsQuery.OrderByDescending(item => item.Price),
+                ItemSorting.Newest or _ => itemsQuery.OrderByDescending(item => item.Id)
             };
 
             var totalItems = itemsQuery.Count();

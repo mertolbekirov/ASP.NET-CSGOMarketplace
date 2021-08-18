@@ -10,7 +10,7 @@ namespace CSGOMarketplace.Services.Items
     {
         ItemQueryServiceModel All(
             string searchTerm = null,
-            ItemSorting sorting = ItemSorting.Price,
+            ItemSorting sorting = ItemSorting.Newest,
             int currentPage = 1,
             int itemsPerPage = int.MaxValue,
             bool publicOnly = true);

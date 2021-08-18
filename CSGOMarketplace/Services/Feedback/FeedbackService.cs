@@ -45,5 +45,21 @@ namespace CSGOMarketplace.Services.Feedback
                 .ProjectTo<FeedbackServiceModel>(mapper.ConfigurationProvider)
                 .FirstOrDefault();
 
+        public bool DeleteById(int id)
+        {
+            var feedback = this.data.Feedback.Find(id);
+
+            if (feedback == null)
+            {
+                return false;
+            }
+
+            this.data.Feedback.Remove(feedback);
+            this.data.SaveChanges();
+            return true;
+
+        }
+
+
     }
 }

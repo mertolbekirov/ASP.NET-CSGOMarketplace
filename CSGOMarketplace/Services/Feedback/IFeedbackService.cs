@@ -10,5 +10,7 @@ namespace CSGOMarketplace.Services.Feedback
         public IEnumerable<FeedbackServiceModel> GetAll();
 
         public FeedbackServiceModel GetById(int id);
+
+        public bool DeleteById(int id);
     }
 }

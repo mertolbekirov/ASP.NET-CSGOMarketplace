@@ -7,19 +7,18 @@
 <form method="get">
     <div class="row">
         <div class="form-group col-md-4">
-            <label asp-for="SearchTerm"></label>
-            <input asp-for="SearchTerm" class="form-control" placeholder="M4A4 | Neo-Noir">
+            <input asp-for="SearchTerm" class="form-control" placeholder="Seach by text...">
         </div>
         <div class="form-group col-md-4">
-            <div class="form-group">
-                <label asp-for="Sorting"></label>
+            <div class="form-group d-flex">
                 <select asp-for="Sorting" class="form-control">
-                    <option value="0">Price (Ascending)</option>
-                    <option value="1">Price (Descending)</option>
-                    <option value="2">Float (Ascending)</option>
-                    <option value="3">Float (Descending)</option>
-                    <option value="4" selected>Newest</option>
+                    <option value="0" selected>Newest</option>
+                    <option value="1">Price (Ascending)</option>
+                    <option value="2">Price (Descending)</option>
+                    <option value="3">Float (Ascending)</option>
+                    <option value="4">Float (Descending)</option>
                 </select>
+                <input class="btn btn-primary" type="submit" value="Search"/>
             </div>
         </div>
     </div>

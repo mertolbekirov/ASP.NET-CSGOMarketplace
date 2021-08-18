@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CSGOMarketplace.Services.Feedback;
+﻿using CSGOMarketplace.Services.Feedback;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CSGOMarketplace.Areas.Admin.Controllers
@@ -36,5 +32,16 @@ namespace CSGOMarketplace.Areas.Admin.Controllers
             return View(feedbackInfo);
         }
 
+        public IActionResult Delete(int id)
+        {
+            var isDeleted = this.feedback
+                .DeleteById(id);
+            if (!isDeleted)
+            {
+                return BadRequest();
+            }
+
+            return RedirectToAction(nameof(AllFeedback));
+        }
     }
 }
